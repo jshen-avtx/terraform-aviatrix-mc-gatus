@@ -168,7 +168,7 @@ The following input variables are optional:
 | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | <a name="output_aws_dashboard_public_ip"></a> [aws\_dashboard\_public\_ip](#output\_aws\_dashboard\_public\_ip)       | Aws Gatus Dashboard  Public IP.                                   |
 | <a name="output_aws_local_user_password"></a> [aws\_local\_user\_password](#output\_aws\_local\_user\_password)       | The generated aws random local\_user\_password if not provided.   |
-| <a name="output_aws_vpc"></a> [aws\_vpc](#output\aws_vpc)                                                             | The AWS vpc and its outputs.                                      |
+| <a name="output_aws_vpc"></a> [aws\_vpc](#output\aws_vpc)                                                             | The AWS VPC ID, private subnets, and public subnets.              |
 | <a name="output_azure_dashboard_public_ip"></a> [azure\_dashboard\_public\_ip](#output\_azure\_dashboard\_public\_ip) | Azure Gatus Dashboard Public IP.                                  |
 | <a name="output_azure_gateway_subnet"></a> [azure\_gateway\_subnet](#output\_azure\_gateway\_subnet)                  | The Azure gateway subnet and its outputs.                         |
 | <a name="output_azure_local_user_password"></a> [azure\_local\_user\_password](#output\_local\_user\_password)        | The generated azure random local\_user\_password if not provided. |

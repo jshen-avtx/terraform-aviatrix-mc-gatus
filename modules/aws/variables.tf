@@ -2,8 +2,8 @@ variable "aws_region" {
   description = "AWS region."
   type        = string
   validation {
-    condition     = contains(data.aws_regions.available.names, var.aws_region)
-    error_message = "AWS region must be specified and valid when AWS is included in the clouds list."
+    condition     = can(regex("^[a-z]+-[a-z]+-[0-9]+$", var.aws_region))
+    error_message = "AWS region must be a valid region identifier (e.g. us-east-1)."
   }
 }
 
@@ -84,6 +84,7 @@ variable "local_user" {
 variable "local_user_password" {
   description = "Password for the local user on the gatus instances."
   type        = string
+  sensitive   = true
   default     = null
 }
 
@@ -112,18 +113,21 @@ variable "dashboard_user" {
 variable "dashboard_password" {
   description = "Password for the dashboard."
   type        = string
+  sensitive   = true
   default     = null
 }
 
 variable "dashboard_certificate" {
   description = "Certificate for the dashboard."
   type        = string
+  sensitive   = true
   default     = null
 }
 
 variable "dashboard_certificate_key" {
   description = "Certificate key for the dashboard."
   type        = string
+  sensitive   = true
   default     = null
 }
 
@@ -141,13 +145,4 @@ variable "name_prefix" {
     condition     = length(var.name_prefix) <= 33 && can(regex("^[0-9a-z-]+$", var.name_prefix))
     error_message = "Name prefix can only contain hyphens, lowercase letters, numbers, and must be 33 characters or less in length."
   }
-}
-
-locals {
-  az_suffixes     = ["a", "b", "c"]
-  azs             = [for i in range(var.number_of_instances) : "${var.aws_region}${local.az_suffixes[i % length(local.az_suffixes)]}"]
-  subnets         = cidrsubnets(var.aws_cidr, [for i in range(var.number_of_instances * 2) : "4"]...)
-  private_subnets = slice(local.subnets, 0, var.number_of_instances)
-  public_subnets  = slice(local.subnets, var.number_of_instances, var.number_of_instances * 2)
-  name_prefix     = "${var.name_prefix}-"
 }

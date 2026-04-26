@@ -10,6 +10,10 @@ output "aws_local_user_password" {
 }
 
 output "aws_vpc" {
-  description = "The AWS vpc and its outputs"
-  value       = module.vpc
+  description = "The AWS VPC ID and subnet information"
+  value = {
+    vpc_id          = module.vpc.vpc_id
+    private_subnets = module.vpc.private_subnets
+    public_subnets  = module.vpc.public_subnets
+  }
 }

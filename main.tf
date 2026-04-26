@@ -6,7 +6,7 @@ module "aws" {
   aws_cidr                  = var.aws_cidr
   aws_region                = var.aws_region
   aws_instance_type         = var.aws_instance_type
-  dashboard                 = var.dashboard || var.dashboard_ssh_key != null ? true : var.dashboard
+  dashboard                 = var.dashboard || var.dashboard_ssh_key != null
   dashboard_access_cidr     = var.dashboard_access_cidr
   dashboard_user            = var.dashboard_user
   dashboard_password        = var.dashboard_password
@@ -18,6 +18,7 @@ module "aws" {
   gatus_version             = var.gatus_version
   local_user                = var.local_user
   local_user_password       = var.local_user_password
+  name_prefix               = var.name_prefix
   number_of_instances       = var.number_of_instances
 }
 
@@ -27,7 +28,7 @@ module "azure" {
   azure_cidr                = var.azure_cidr
   azure_region              = var.azure_region == null ? "region_placeholder" : var.azure_region
   azure_instance_type       = var.azure_instance_type
-  dashboard                 = var.dashboard || var.dashboard_ssh_key != null ? true : var.dashboard
+  dashboard                 = var.dashboard || var.dashboard_ssh_key != null
   dashboard_access_cidr     = var.dashboard_access_cidr
   dashboard_user            = var.dashboard_user
   dashboard_password        = var.dashboard_password
@@ -39,5 +40,6 @@ module "azure" {
   gatus_version             = var.gatus_version
   local_user                = var.local_user
   local_user_password       = var.local_user_password
+  name_prefix               = var.name_prefix
   number_of_instances       = var.number_of_instances
 }
