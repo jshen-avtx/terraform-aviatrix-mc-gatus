@@ -6,13 +6,13 @@ data "http" "my_ip" {
 
 resource "random_password" "password" {
   count            = var.local_user_password == null ? 1 : 0
-  length           = 12           # Password length
-  special          = true         # Include special characters
-  override_special = "!#$%&*-_=+" # Specify which special characters to include
-  min_lower        = 2            # Minimum lowercase characters
-  min_upper        = 2            # Minimum uppercase characters
-  min_numeric      = 2            # Minimum numeric characters
-  min_special      = 2            # Minimum special characters
+  length           = 12
+  special          = true
+  override_special = "!#$%&*-_=+"
+  min_lower        = 2
+  min_upper        = 2
+  min_numeric      = 2
+  min_special      = 2
 }
 
 module "vpc" {
@@ -87,6 +87,7 @@ resource "aws_security_group_rule" "this_egress" {
 }
 
 resource "aws_security_group_rule" "this_dashboard_egress" {
+  count             = var.dashboard ? 1 : 0
   type              = "egress"
   description       = "Allow outbound access"
   from_port         = 0
@@ -103,8 +104,9 @@ data "aws_ssm_parameter" "ubuntu_ami" {
 module "gatus" {
   for_each = toset(formatlist("%d", range(var.number_of_instances)))
   source   = "terraform-aws-modules/ec2-instance/aws"
+  version  = "6.4.0"
 
-  name = "${local.name_prefix}aws-gatus-az${each.value + 1}"
+  name = "${local.name_prefix}aws-gatus-az${tonumber(each.value) + 1}"
 
   instance_type          = var.aws_instance_type
   vpc_security_group_ids = [aws_security_group.this.id]
@@ -113,7 +115,7 @@ module "gatus" {
 
   user_data = templatefile("${path.module}/templates/gatus.tpl",
     {
-      name     = "${local.name_prefix}aws-gatus-az${each.value + 1}"
+      name     = "${local.name_prefix}aws-gatus-az${tonumber(each.value) + 1}"
       user     = var.local_user
       password = var.local_user_password != null ? var.local_user_password : random_password.password[0].result
       https    = var.gatus_endpoints.https
@@ -137,8 +139,9 @@ resource "aws_key_pair" "dashboard_ssh_key" {
 }
 
 module "dashboard" {
-  count  = var.dashboard ? 1 : 0
-  source = "terraform-aws-modules/ec2-instance/aws"
+  count   = var.dashboard ? 1 : 0
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "6.4.0"
 
   name = "${local.name_prefix}aws-gatus-dashboard"
 

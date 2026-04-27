@@ -10,11 +10,17 @@ output "azure_local_user_password" {
 }
 
 output "azure_vnet" {
-  description = "The Azure vnet and its outputs"
-  value       = module.vnet
+  description = "The Azure VNet resource ID and name"
+  value = {
+    resource_id = module.vnet.resource_id
+    name        = module.vnet.name
+  }
 }
 
 output "azure_gateway_subnet" {
-  description = "The Azure gateway subnet and its outputs"
-  value       = azurerm_subnet.public_gateway
+  description = "The Azure gateway subnet ID and address prefixes"
+  value = {
+    id               = azurerm_subnet.public_gateway.id
+    address_prefixes = azurerm_subnet.public_gateway.address_prefixes
+  }
 }

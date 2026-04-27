@@ -10,6 +10,26 @@ All deployed instances conform to the following spec:
 | :------ | :------------- | :------------------------------ | :------------ |
 | **AWS** | `24.04`        | `Docker`, `Gatus`               | `t3.nano`     |
 
+## Running tests
+
+Unit tests use Terraform's native test framework with mock providers — no AWS credentials required.
+
+```bash
+cd modules/aws
+terraform init
+terraform test
+```
+
+Expected output:
+
+```
+tests/conditional_unit_test.tftest.hcl... pass
+tests/defaults_unit_test.tftest.hcl... pass
+tests/validation_unit_test.tftest.hcl... pass
+
+Success! 29 passed, 0 failed.
+```
+
 ## Diagram
 
 <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-gatus/blob/main/img/aws.png?raw=true">
@@ -95,4 +115,4 @@ The following input variables are optional:
 | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | <a name="output_aws_dashboard_public_ip"></a> [aws\_dashboard\_public\_ip](#output\_aws\_dashboard\_public\_ip) | Aws Gatus Dashboard  Public IP.                                 |
 | <a name="output_aws_local_user_password"></a> [aws\_local\_user\_password](#output\_aws\_local\_user\_password) | The generated aws random local\_user\_password if not provided. |
-| <a name="output_aws_vpc"></a> [aws\_vpc](#output\aws_vpc)                                                       | The AWS vpc and its outputs.                                    |
+| <a name="output_aws_vpc"></a> [aws\_vpc](#output\aws_vpc)                                                       | The AWS VPC ID, private subnets, and public subnets.            |
