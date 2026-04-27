@@ -4,13 +4,13 @@ data "http" "my_ip" {
 
 resource "random_password" "password" {
   count            = var.local_user_password == null ? 1 : 0
-  length           = 12           # Password length
-  special          = true         # Include special characters
-  override_special = "!#$%&*-_=+" # Specify which special characters to include
-  min_lower        = 2            # Minimum lowercase characters
-  min_upper        = 2            # Minimum uppercase characters
-  min_numeric      = 2            # Minimum numeric characters
-  min_special      = 2            # Minimum special characters
+  length           = 12
+  special          = true
+  override_special = "!#$%&*-_=+"
+  min_lower        = 2
+  min_upper        = 2
+  min_numeric      = 2
+  min_special      = 2
 }
 
 resource "azurerm_resource_group" "this" {
@@ -163,6 +163,7 @@ module "gatus" {
 }
 
 data "cloudinit_config" "dashboard" {
+  count         = var.dashboard ? 1 : 0
   gzip          = false
   base64_encode = true
 
@@ -190,7 +191,7 @@ module "dashboard" {
   name                = "${local.name_prefix}azure-gatus-dashboard"
   admin_username      = var.local_user
   admin_password      = var.local_user_password != null ? var.local_user_password : random_password.password[0].result
-  user_data           = data.cloudinit_config.dashboard.rendered
+  user_data           = data.cloudinit_config.dashboard[0].rendered
   sku_size            = var.azure_instance_type
   os_type             = "Linux"
   os_disk = {
@@ -302,7 +303,7 @@ resource "azurerm_network_security_rule" "this_inbound_dashboard" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   source_address_prefixes     = var.dashboard_access_cidr != null ? [var.dashboard_access_cidr] : ["${chomp(data.http.my_ip.response_body)}/32"]
-  destination_port_range      = var.dashboard_password != null ? 443 : 80
+  destination_port_range      = var.dashboard_password != null ? "443" : "80"
   destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.this_dashboard[0].name

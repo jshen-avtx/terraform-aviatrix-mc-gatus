@@ -91,9 +91,21 @@ The following input variables are optional:
 
 ## Outputs
 
-| Name                                                                                                                  | Description                                                       |
-| --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| <a name="output_azure_dashboard_public_ip"></a> [azure\_dashboard\_public\_ip](#output\_azure\_dashboard\_public\_ip) | Azure Gatus Dashboard Public IP.                                  |
-| <a name="output_azure_gateway_subnet"></a> [azure\_gateway\_subnet](#output\_azure\_gateway\_subnet)                  | The Azure gateway subnet and its outputs.                         |
-| <a name="output_azure_local_user_password"></a> [azure\_local\_user\_password](#output\_local\_user\_password)        | The generated azure random local\_user\_password if not provided. |
-| <a name="output_azure_vnet"></a> [azure\_vnet](#output\_azure_vnet)                                                   | The Azure vnet and its outputs.                                   |
+| Name                                                                                                                  | Description                                                              |
+| --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <a name="output_azure_dashboard_public_ip"></a> [azure\_dashboard\_public\_ip](#output\_azure\_dashboard\_public\_ip) | Azure Gatus Dashboard Public IP.                                         |
+| <a name="output_azure_gateway_subnet"></a> [azure\_gateway\_subnet](#output\_azure\_gateway\_subnet)                  | The Azure gateway subnet ID and address prefixes.                        |
+| <a name="output_azure_local_user_password"></a> [azure\_local\_user\_password](#output\_local\_user\_password)        | The generated azure random local\_user\_password if not provided.        |
+| <a name="output_azure_vnet"></a> [azure\_vnet](#output\_azure_vnet)                                                   | The Azure VNet resource ID and name (`resource_id`, `name`).             |
+
+## Running Tests
+
+Unit tests use `mock_provider` — no Azure credentials or real resources required.
+
+```bash
+cd modules/azure
+terraform init
+terraform test
+```
+
+The test suite covers variable validation (16 runs), default behavior (5 runs), and conditional resource creation (5 runs). All runs use `command = plan`.
